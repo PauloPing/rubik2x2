@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "rubik.h"
 
-#define NB_FACE 6
+#include "rubik.h"
+#include "rotation.h"
 
 /*
   Nom : color
@@ -42,7 +42,7 @@ char *color(Cellule c)
   Paramètres : Le rubik et la direction de la face qu'on cherche
   Retour : la face
 */
-Face *returnFace(Face *rubik[NB_FACE], Direction direction)
+Face *returnFace(Direction direction, Face *rubik[NB_FACE])
 {
   int i;
   for (i = 0; i < NB_FACE; i++)
@@ -97,7 +97,7 @@ void printRubikCube(Face *rubik[NB_FACE])
 {
   int nbFaceMilieu = NB_FACE - 2;
   int i, j, k;
-  printFace(returnFace(rubik, HAUT));
+  printFace(returnFace(HAUT, rubik));
   for (i = 0; i < nbFaceMilieu; i++)
   {
     printf("\x1b[30m ------  ");
@@ -122,7 +122,7 @@ void printRubikCube(Face *rubik[NB_FACE])
     printf("\x1b[30m ------  ");
   }
   printf("\n");
-  printFace(returnFace(rubik, BAS));
+  printFace(returnFace(BAS, rubik));
   printf("\x1b[0m");
 }
 
@@ -142,15 +142,16 @@ void creerRubik(Face *rubik[NB_FACE])
     Cellule **tab = malloc(sizeof(Cellule) * NB_CELLULE);
     for (j = 0; j < NB_CELLULE; j++)
     {
-      tab[j] = malloc(sizeof(Cellule));
+      tab[j] = malloc(sizeof(Cellule) * TAILLE_MATRICE);
     }
 
-    for (j = 0; j < NB_CELLULE; j++)
+    for (j = 0; j < TAILLE_MATRICE; j++)
     {
-      for (k = 0; k < NB_CELLULE; k++)
+      for (k = 0; k < TAILLE_MATRICE; k++)
       {
         Cellule c;
         c.color = i;
+        c.face = face;
         c.value = (j * TAILLE_MATRICE) + k;
         tab[j][k] = c;
       }
@@ -158,4 +159,24 @@ void creerRubik(Face *rubik[NB_FACE])
     face->tab = tab;
     rubik[i] = face;
   }
+}
+
+/*
+  Nom : permuteCellule
+  Description : Cette fonction permute deux cellules 
+  Paramètres : Les deux cellules
+  Retour : void 
+*/
+void permuteCellule(Cellule *c1, Cellule *c2)
+{
+  Cellule c3;
+  c3.color = c1->color;
+  c3.face = c1->face;
+  c3.value = c1->value;
+  c1->color = c2->color;
+  c1->value = c2->value;
+  c1->face = c2->face;
+  c2->color = c3.color;
+  c2->face = c3.face;
+  c2->value = c3.value;
 }

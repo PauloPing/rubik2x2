@@ -1,5 +1,9 @@
+#ifndef __RUBIK__
+#define __RUBIK__
+
 #define NB_CELLULE 4
 #define TAILLE_MATRICE 2
+#define NB_FACE 6
 
 typedef enum
 {
@@ -21,18 +25,23 @@ typedef enum
   BAS,
 } Direction;
 
+typedef struct face Face;
 typedef struct
 {
   int value;
   Color color;
+  Face *face;
 } Cellule;
 
-typedef struct
+struct face
 {
   Direction direction;
   Cellule **tab;
-} Face;
+} face;
 
 void creerRubik(Face **);
-Face *returnFace(Face **, Direction);
+Face *returnFace(Direction, Face **);
 char *color(Cellule);
+void printRubikCube(Face **);
+void permuteCellule(Cellule *, Cellule *);
+#endif
