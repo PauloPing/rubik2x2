@@ -105,11 +105,11 @@ void rotationRPrime(Face *rubik[NB_FACE])
   Face *avant = returnFace(DEVANT, rubik);
   permuteCellule(&avant->tab[0][1], &bas->tab[0][1]);
   permuteCellule(&avant->tab[1][1], &bas->tab[1][1]);
-  // Face HAUT -> Face DERRIERE
+  // Face HAUT->Face DERRIERE
   Face *derriere = returnFace(DERRIERE, rubik);
   permuteCellule(&avant->tab[0][1], &derriere->tab[1][0]);
   permuteCellule(&avant->tab[1][1], &derriere->tab[0][0]);
-  // Face DERRIERE -> Face BAS
+  // // Face DERRIERE -> Face BAS
   Face *haut = returnFace(HAUT, rubik);
   permuteCellule(&avant->tab[0][1], &haut->tab[0][1]);
   permuteCellule(&avant->tab[1][1], &haut->tab[1][1]);
@@ -219,10 +219,10 @@ void rotationF(Face *rubik[NB_FACE])
   Face *bas = returnFace(BAS, rubik);
   permuteCellule(&haut->tab[1][0], &bas->tab[0][1]);
   permuteCellule(&haut->tab[1][1], &bas->tab[0][0]);
-  // Face BAS -> Face GAUCHE
+  // // Face BAS -> Face GAUCHE
   Face *gauche = returnFace(GAUCHE, rubik);
-  permuteCellule(&haut->tab[1][0], &gauche->tab[0][0]);
-  permuteCellule(&haut->tab[1][1], &gauche->tab[1][0]);
+  permuteCellule(&haut->tab[1][0], &gauche->tab[1][1]);
+  permuteCellule(&haut->tab[1][1], &gauche->tab[0][1]);
   // rotation face AVANT
   Face *avant = returnFace(DEVANT, rubik);
   permuteCellule(&avant->tab[0][0], &avant->tab[0][1]);
@@ -234,22 +234,20 @@ void rotationFPrime(Face *rubik[NB_FACE])
 {
   Face *haut = returnFace(HAUT, rubik);
   Face *gauche = returnFace(GAUCHE, rubik);
-  // Face HAUT -> Face GAUCHE
-  permuteCellule(&haut->tab[1][0], &gauche->tab[0][0]);
-  permuteCellule(&haut->tab[1][1], &gauche->tab[1][0]);
-  // Face GAUCHE -> Face BAS
-  Face *bas = returnFace(BAS, rubik);
-  permuteCellule(&haut->tab[1][0], &bas->tab[0][1]);
-  permuteCellule(&haut->tab[1][1], &bas->tab[0][0]);
-  // Face BAS -> Face DROITE
   Face *droite = returnFace(DROITE, rubik);
+  Face *avant = returnFace(DEVANT, rubik);
+  Face *bas = returnFace(BAS, rubik);
+
   permuteCellule(&haut->tab[1][0], &droite->tab[0][0]);
   permuteCellule(&haut->tab[1][1], &droite->tab[1][0]);
-  // Rotation Face AVANT
-  Face *avant = returnFace(DEVANT, rubik);
-  permuteCellule(&avant->tab[0][0], &avant->tab[1][0]);
-  permuteCellule(&avant->tab[0][0], &avant->tab[1][1]);
+  permuteCellule(&droite->tab[0][0], &gauche->tab[1][1]);
+  permuteCellule(&droite->tab[1][0], &gauche->tab[0][1]);
+  permuteCellule(&bas->tab[0][0], &droite->tab[1][0]);
+  permuteCellule(&bas->tab[0][1], &droite->tab[0][0]);
+
   permuteCellule(&avant->tab[0][0], &avant->tab[0][1]);
+  permuteCellule(&avant->tab[0][1], &avant->tab[1][0]);
+  permuteCellule(&avant->tab[0][1], &avant->tab[1][1]);
 }
 
 void rotationB(Face *rubik[NB_FACE])
@@ -278,18 +276,18 @@ void rotationBPrime(Face *rubik[NB_FACE])
 {
   Face *haut = returnFace(HAUT, rubik);
   Face *gauche = returnFace(GAUCHE, rubik);
-  // Face HAUTE -> Face GAUCHE
-  permuteCellule(&haut->tab[0][0], &gauche->tab[1][0]);
-  permuteCellule(&haut->tab[0][1], &gauche->tab[0][0]);
-  // Face GAUCHE -> Face BAS
   Face *bas = returnFace(BAS, rubik);
-  permuteCellule(&haut->tab[0][0], &bas->tab[1][0]);
-  permuteCellule(&haut->tab[0][1], &bas->tab[1][1]);
-  // Face BAS -> Face DROITE
   Face *droite = returnFace(DROITE, rubik);
-  permuteCellule(&haut->tab[0][0], &droite->tab[0][1]);
-  permuteCellule(&haut->tab[0][1], &droite->tab[1][1]);
-  // Rotation Face Arriere
+
+  permuteCellule(&droite->tab[0][1], &haut->tab[0][0]);
+  permuteCellule(&droite->tab[1][1], &haut->tab[0][1]);
+
+  permuteCellule(&droite->tab[0][1], &gauche->tab[1][0]);
+  permuteCellule(&droite->tab[1][1], &gauche->tab[0][0]);
+
+  permuteCellule(&droite->tab[0][1], &bas->tab[1][1]);
+  permuteCellule(&droite->tab[1][1], &bas->tab[1][0]);
+
   Face *derriere = returnFace(DERRIERE, rubik);
   permuteCellule(&derriere->tab[0][0], &derriere->tab[0][1]);
   permuteCellule(&derriere->tab[0][0], &derriere->tab[1][1]);
