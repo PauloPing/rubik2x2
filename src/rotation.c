@@ -293,3 +293,120 @@ void rotationBPrime(Face *rubik[NB_FACE])
   permuteCellule(&derriere->tab[0][0], &derriere->tab[1][1]);
   permuteCellule(&derriere->tab[0][0], &derriere->tab[1][0]);
 }
+
+void rotationRURpUp(Face *rubik[NB_FACE])
+{
+  rotation("R", rubik);
+  rotation("U", rubik);
+  rotation("Rp", rubik);
+  rotation("Up", rubik);
+}
+
+int cas1(Face *rubik[NB_FACE])
+{
+  if (rubik[HAUT]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DROITE]->tab[0][0].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
+  {
+    rotation("Rp", rubik);
+    rotation("Up", rubik);
+    rotation("R", rubik);
+    rotation("Up", rubik);
+    rotation("Rp", rubik);
+    rotation("U", rubik);
+    rotation("U", rubik);
+    rotation("R", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas2(Face *rubik[NB_FACE])
+{
+  if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][1].color == JAUNE)
+  {
+    rotation("L", rubik);
+    rotation("U", rubik);
+    rotation("Lp", rubik);
+    rotation("U", rubik);
+    rotation("L", rubik);
+    rotation("U", rubik);
+    rotation("U", rubik);
+    rotation("Lp", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas3(Face *rubik[NB_FACE])
+{
+  if (rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE)
+  {
+    rotation("R", rubik);
+    rotation("R", rubik);
+    rotation("U", rubik);
+    rotation("U", rubik);
+    rotation("R", rubik);
+    rotation("U", rubik);
+    rotation("U", rubik);
+    rotation("R", rubik);
+    rotation("R", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas4(Face *rubik[NB_FACE])
+{
+  if (rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DEVANT]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[DERRIERE]->tab[0][0].color == JAUNE)
+  {
+    rotation("F", rubik);
+    rotationRURpUp(rubik);
+    rotationRURpUp(rubik);
+    rotation("Fp", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas5(Face *rubik[NB_FACE])
+{
+  if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][0].color == JAUNE)
+  {
+    rotation("F", rubik);
+    rotationRURpUp(rubik);
+    rotation("Fp", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas6(Face *rubik[NB_FACE])
+{
+  if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
+  {
+    rotationRURpUp(rubik);
+    rotation("Rp", rubik);
+    rotation("F", rubik);
+    rotation("R", rubik);
+    rotation("Fp", rubik);
+    return 1;
+  }
+  return 0;
+}
+
+int cas7(Face *rubik[NB_FACE])
+{
+  if (rubik[HAUT]->tab[0][0].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[DROITE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
+  {
+    rotation("F", rubik);
+    rotation("R", rubik);
+    rotation("Up", rubik);
+    rotation("Rp", rubik);
+    rotation("Up", rubik);
+    rotation("R", rubik);
+    rotation("U", rubik);
+    rotation("Rp", rubik);
+    rotation("Fp", rubik);
+    return 1;
+  }
+  return 0;
+}

@@ -190,7 +190,6 @@ void permuteCellule(Cellule *c1, Cellule *c2)
 */
 void melangerRubik(Face *rubik[NB_FACE])
 {
-  srand(time(NULL));
   int r, i = 0;
   for (i = 0; i < 300; i++)
   {
@@ -373,6 +372,27 @@ void monterRubik(Face *rubik[NB_FACE])
 }
 
 /*
+  Nom : faceBlancheValide
+  Description : dis si la face blanche est correct
+  Paramètres : la face blanche
+  Retour : 1 si valide, 0 sinon
+*/
+int faceBlancheValide(Face *face)
+{
+  return celluleCorrecte(face, 0, 0, BLANC, 0) && celluleCorrecte(face, 0, 1, BLANC, 1) && celluleCorrecte(face, 1, 0, BLANC, 2) && celluleCorrecte(face, 1, 1, BLANC, 3);
+}
+
+Color couleurCellule(Face *face, int x, int y)
+{
+  return face->tab[x][y].color;
+}
+
+int faceJauneValide(Face *face)
+{
+  return couleurCellule(face, 0, 0) == JAUNE && couleurCellule(face, 0, 1) == JAUNE && couleurCellule(face, 1, 0) == JAUNE && couleurCellule(face, 1, 1) == JAUNE;
+}
+
+/*
   Nom : faireFaceBlanche
   Description : cette fonction fait la face blanche
   Paramètres : le rubik
@@ -382,6 +402,84 @@ void faireFaceBlanche(Face *rubik[NB_FACE])
 {
   tourneRubikDevant(rubik, chercheCellule(rubik, BLANC, 0));
   monterRubik(rubik);
+
+  int compteur = 0;
   while (!celluleCorrecte(returnFace(HAUT, rubik), 0, 0, BLANC, 0))
     rotation("Up", rubik);
+  if (celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 1) || celluleCorrecte(rubik[GAUCHE], 0, 1, BLANC, 1) || celluleCorrecte(rubik[DEVANT], 0, 0, BLANC, 1))
+    rotation("Dp", rubik);
+  while (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1))
+  {
+    rotation("Rp", rubik);
+    if (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1))
+      rotation("Dp", rubik);
+    if (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1) && compteur % 4 == 0)
+      rotation("F", rubik);
+    compteur++;
+  }
+  while (!celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 2))
+  {
+    if (celluleCorrecte(rubik[DEVANT], 1, 1, BLANC, 2))
+      rotation("Dp", rubik);
+    rotation("F", rubik);
+    if (!celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 2))
+      rotation("Dp", rubik);
+  }
+  compteur = 0;
+  if (celluleCorrecte(rubik[DEVANT], 1, 0, BLANC, 3) || celluleCorrecte(rubik[BAS], 0, 0, BLANC, 3))
+  {
+    rotation("D", rubik);
+    rotation("Rp", rubik);
+    rotation("Dp", rubik);
+    rotation("R", rubik);
+  }
+  while (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
+  {
+    rotation("Rp", rubik);
+    for (int i = 0; i < 4 && !celluleCorrecte(rubik[DEVANT], 1, 1, BLANC, 3); i++)
+    {
+      rotation("Dp", rubik);
+    }
+    rotation("R", rubik);
+    if (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
+    {
+      rotation("F", rubik);
+      for (int i = 0; i < 4 && !celluleCorrecte(rubik[DROITE], 1, 0, BLANC, 3); i++)
+      {
+        rotation("Dp", rubik);
+      }
+      rotation("Fp", rubik);
+    }
+    if (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
+    {
+      rotation("F", rubik);
+      rotation("Dp", rubik);
+      rotation("Fp", rubik);
+    }
+  }
+  if (!faceBlancheValide(rubik[HAUT]))
+    printf("ERROR\n");
+  // else
+  // {
+  //   printRubikCube(rubik);
+  //   printf("NONONOONONOONONONONONONOONNO\n");
+  // }
+}
+
+void faireFaceJaune(Face *rubik[NB_FACE])
+{
+  tourneRubikDevant(rubik, returnFace(BAS, rubik));
+  monterRubik(rubik);
+  int res = 0;
+  // printRubikCube(rubik);
+
+  while (!faceJauneValide(rubik[HAUT]))
+  {
+    if (cas1(rubik) || cas2(rubik) || cas3(rubik) || cas4(rubik) || cas5(rubik) || cas6(rubik) || cas7(rubik))
+      res = 1;
+    else
+      rotation("U", rubik);
+  }
+  if (!faceJauneValide(rubik[HAUT]))
+    printf("NONNONONN JAUNE JAUNE");
 }

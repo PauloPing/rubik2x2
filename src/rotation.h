@@ -20,7 +20,17 @@ void rotationB(Face **);
 void rotationBPrime(Face **);
 void melangerRubik(Face **);
 
-// Tablea avec toutes les rotations
+// suite de rota pour faire la face jaune
+
+void rotationRURpUp(Face **);
+int cas1(Face **);
+int cas2(Face **);
+int cas3(Face **);
+int cas4(Face **);
+int cas5(Face **);
+int cas6(Face **);
+int cas7(Face **);
+// Tableau avec toutes les rotations
 void *mouvement[NB_ROTATION] = {
     rotationL,
     rotationLPrime,

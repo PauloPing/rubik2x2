@@ -5,13 +5,18 @@
 
 int main(void)
 {
+  srand(time(NULL));
   Face *rubik[NB_FACE];
-  creerRubik(rubik);
-  melangerRubik(rubik);
-  printRubikCube(rubik);
-  faireFaceBlanche(rubik);
-  printRubikCube(rubik);
+  for (int i = 0; i < 100; i++)
+  {
+    creerRubik(rubik);
+    melangerRubik(rubik);
+    faireFaceBlanche(rubik);
+    faireFaceJaune(rubik);
+    printRubikCube(rubik);
 
-  // REVOIR ROTATION DU RUBIK PROBLEME / ROTATION CLASSIQUE CORRECT
+    // RESTE JUSTE LA DERNIÈRE METHODE POUR INIR LE RUBIK APRÈS LA FACE JAUNE
+  }
+
   return 0;
 }
