@@ -382,14 +382,26 @@ int faceBlancheValide(Face *face)
   return celluleCorrecte(face, 0, 0, BLANC, 0) && celluleCorrecte(face, 0, 1, BLANC, 1) && celluleCorrecte(face, 1, 0, BLANC, 2) && celluleCorrecte(face, 1, 1, BLANC, 3);
 }
 
+/*
+  Nom : couleurCellule
+  Description : Donne la couleur de la cellule sur la Face face à la position x/y dans la matrice
+  Paramètres : la face et ses coordonnées
+  Retour : La couleur de la cellule
+*/
 Color couleurCellule(Face *face, int x, int y)
 {
   return face->tab[x][y].color;
 }
 
-int faceJauneValide(Face *face)
+/*
+  Nom : faceValide
+  Description : Dis si la Face face dispose uniquement de la Color color.
+  Paramètres : la face et la couleur en question
+  Retour : A si oui sinon 0
+*/
+int faceValide(Face *face, Color color)
 {
-  return couleurCellule(face, 0, 0) == JAUNE && couleurCellule(face, 0, 1) == JAUNE && couleurCellule(face, 1, 0) == JAUNE && couleurCellule(face, 1, 1) == JAUNE;
+  return couleurCellule(face, 0, 0) == color && couleurCellule(face, 0, 1) == color && couleurCellule(face, 1, 0) == color && couleurCellule(face, 1, 1) == color;
 }
 
 /*
@@ -466,20 +478,106 @@ void faireFaceBlanche(Face *rubik[NB_FACE])
   // }
 }
 
+/*
+  Nom : faireFaceJaune
+  Description : cette fonction fait la face jaune
+  Paramètres : le rubik
+  Retour : void
+*/
 void faireFaceJaune(Face *rubik[NB_FACE])
 {
   tourneRubikDevant(rubik, returnFace(BAS, rubik));
   monterRubik(rubik);
   int res = 0;
-  // printRubikCube(rubik);
 
-  while (!faceJauneValide(rubik[HAUT]))
+  while (!faceValide(rubik[HAUT], JAUNE))
   {
     if (cas1(rubik) || cas2(rubik) || cas3(rubik) || cas4(rubik) || cas5(rubik) || cas6(rubik) || cas7(rubik))
       res = 1;
     else
       rotation("U", rubik);
   }
-  if (!faceJauneValide(rubik[HAUT]))
+  if (!faceValide(rubik[HAUT], JAUNE))
     printf("NONNONONN JAUNE JAUNE");
+}
+
+int rubikValide(Face *rubik[NB_FACE])
+{
+  for (int i = 0; i < NB_FACE; i++)
+  {
+    if (!faceValide(returnFace(i, rubik), couleurCellule(returnFace(i, rubik), 0, 0)))
+    {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+Face *returnFaceJaune(Face *rubik[NB_FACE])
+{
+  Face *res = malloc(sizeof(Face));
+  for (int i = 0; i < NB_FACE; i++)
+  {
+    if (rubik[i]->tab[0][0].color == JAUNE)
+    {
+      res = rubik[i];
+      break;
+    }
+  }
+  return res;
+}
+
+/*
+  Nom : faireFaceJaune
+  Description : cette fonction permet de finir le rubik en terminant la face Jaune correctement pour obtebir le rubik
+  Paramètres : le rubik
+  Retour : void
+*/
+void terminerRubik(Face *rubik[NB_FACE])
+{
+  if (rubikValide(rubik))
+    return;
+
+  int valid = 0;
+  for (int j = 0; j < 4; j++)
+  {
+    for (int i = 1; i < 5; i++)
+    {
+      if (faceValide(rubik[i], rubik[i]->tab[0][0].color))
+      {
+        tourneRubikDevant(rubik, rubik[i]);
+        tourneRubikDevant(rubik, rubik[DERRIERE]);
+        valid = 1;
+        break;
+      }
+    }
+    if (!valid)
+      rotation("U", rubik);
+  }
+  if (!valid && !rubikValide(rubik))
+  {
+
+    dernireRotation(rubik, 0);
+    tourneRubikDevant(rubik, returnFaceJaune(rubik));
+    monterRubik(rubik);
+    while (valid == 0)
+    {
+      for (int i = 1; i < 5; i++)
+      {
+        if (faceValide(rubik[i], rubik[i]->tab[0][0].color))
+        {
+          tourneRubikDevant(rubik, rubik[i]);
+          tourneRubikDevant(rubik, rubik[DERRIERE]);
+          valid = 1;
+          break;
+        }
+      }
+      if (!valid)
+        rotation("U", rubik);
+    }
+  }
+  if(!rubikValide(rubik)){
+    dernireRotation(rubik, 0);
+    rotation("Fp", rubik);
+  }
 }

@@ -7,15 +7,15 @@ int main(void)
 {
   srand(time(NULL));
   Face *rubik[NB_FACE];
-  for (int i = 0; i < 100; i++)
+  for (int i = 0; i < 10000; i++)
   {
     creerRubik(rubik);
     melangerRubik(rubik);
     faireFaceBlanche(rubik);
     faireFaceJaune(rubik);
-    printRubikCube(rubik);
-
-    // RESTE JUSTE LA DERNIÈRE METHODE POUR INIR LE RUBIK APRÈS LA FACE JAUNE
+    terminerRubik(rubik);
+    if (!rubikValide(rubik))
+      printf("ERROR A DEMAIN");
   }
 
   return 0;

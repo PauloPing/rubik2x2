@@ -410,3 +410,21 @@ int cas7(Face *rubik[NB_FACE])
   }
   return 0;
 }
+
+void dernireRotation(Face *rubik[NB_FACE], int cas)
+{
+  rotation("Lp", rubik);
+  rotation("U", rubik);
+  rotation("Rp", rubik);
+  rotation("D", rubik);
+  rotation("D", rubik);
+  rotation("R", rubik);
+  rotation("Up", rubik);
+  rotation("Rp", rubik);
+  rotation("D", rubik);
+  rotation("D", rubik);
+  rotation("R", rubik);
+  rotation("R", rubik);
+
+  // L' U R' D2 R U' R' R' D2 R2
+}
