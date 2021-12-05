@@ -2,11 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "listeChainee.h"
 #include "rubik.h"
 #include "rotation.h"
 
-void rotation(char *rotation, Face *rubik[NB_FACE])
+/*
+  Dans ce fichier, vous allez retrouver toutes les rotations/schéma de rotation
+  pour la réalisation du cube.
+*/
+
+void rotation(char *rotation, Face *rubik[NB_FACE], ListeChainee *liste)
 {
+  ajoutElement(rotation, liste);
   if (!strcmp(rotation, "L"))
     rotationL(rubik);
   else if (!strcmp(rotation, "Lp"))
@@ -294,137 +301,137 @@ void rotationBPrime(Face *rubik[NB_FACE])
   permuteCellule(&derriere->tab[0][0], &derriere->tab[1][0]);
 }
 
-void rotationRURpUp(Face *rubik[NB_FACE])
+void rotationRURpUp(Face *rubik[NB_FACE], ListeChainee *liste)
 {
-  rotation("R", rubik);
-  rotation("U", rubik);
-  rotation("Rp", rubik);
-  rotation("Up", rubik);
+  rotation("R", rubik, liste);
+  rotation("U", rubik, liste);
+  rotation("Rp", rubik, liste);
+  rotation("Up", rubik, liste);
 }
 
-int cas1(Face *rubik[NB_FACE])
+int cas1(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[HAUT]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DROITE]->tab[0][0].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
   {
-    rotation("Rp", rubik);
-    rotation("Up", rubik);
-    rotation("R", rubik);
-    rotation("Up", rubik);
-    rotation("Rp", rubik);
-    rotation("U", rubik);
-    rotation("U", rubik);
-    rotation("R", rubik);
+    rotation("Rp", rubik, liste);
+    rotation("Up", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("Up", rubik, liste);
+    rotation("Rp", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("R", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas2(Face *rubik[NB_FACE])
+int cas2(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][1].color == JAUNE)
   {
-    rotation("L", rubik);
-    rotation("U", rubik);
-    rotation("Lp", rubik);
-    rotation("U", rubik);
-    rotation("L", rubik);
-    rotation("U", rubik);
-    rotation("U", rubik);
-    rotation("Lp", rubik);
+    rotation("L", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("Lp", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("L", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("Lp", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas3(Face *rubik[NB_FACE])
+int cas3(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE)
   {
-    rotation("R", rubik);
-    rotation("R", rubik);
-    rotation("U", rubik);
-    rotation("U", rubik);
-    rotation("R", rubik);
-    rotation("U", rubik);
-    rotation("U", rubik);
-    rotation("R", rubik);
-    rotation("R", rubik);
+    rotation("R", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("R", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas4(Face *rubik[NB_FACE])
+int cas4(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[DERRIERE]->tab[0][0].color == JAUNE && rubik[DEVANT]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[DERRIERE]->tab[0][0].color == JAUNE)
   {
-    rotation("F", rubik);
-    rotationRURpUp(rubik);
-    rotationRURpUp(rubik);
-    rotation("Fp", rubik);
+    rotation("F", rubik, liste);
+    rotationRURpUp(rubik, liste);
+    rotationRURpUp(rubik, liste);
+    rotation("Fp", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas5(Face *rubik[NB_FACE])
+int cas5(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[GAUCHE]->tab[0][1].color == JAUNE && rubik[GAUCHE]->tab[0][0].color == JAUNE)
   {
-    rotation("F", rubik);
-    rotationRURpUp(rubik);
-    rotation("Fp", rubik);
+    rotation("F", rubik, liste);
+    rotationRURpUp(rubik, liste);
+    rotation("Fp", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas6(Face *rubik[NB_FACE])
+int cas6(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[HAUT]->tab[0][1].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[DERRIERE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
   {
-    rotationRURpUp(rubik);
-    rotation("Rp", rubik);
-    rotation("F", rubik);
-    rotation("R", rubik);
-    rotation("Fp", rubik);
+    rotationRURpUp(rubik, liste);
+    rotation("Rp", rubik, liste);
+    rotation("F", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("Fp", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-int cas7(Face *rubik[NB_FACE])
+int cas7(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubik[HAUT]->tab[0][0].color == JAUNE && rubik[HAUT]->tab[1][1].color == JAUNE && rubik[DROITE]->tab[0][1].color == JAUNE && rubik[DEVANT]->tab[0][0].color == JAUNE)
   {
-    rotation("F", rubik);
-    rotation("R", rubik);
-    rotation("Up", rubik);
-    rotation("Rp", rubik);
-    rotation("Up", rubik);
-    rotation("R", rubik);
-    rotation("U", rubik);
-    rotation("Rp", rubik);
-    rotation("Fp", rubik);
+    rotation("F", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("Up", rubik, liste);
+    rotation("Rp", rubik, liste);
+    rotation("Up", rubik, liste);
+    rotation("R", rubik, liste);
+    rotation("U", rubik, liste);
+    rotation("Rp", rubik, liste);
+    rotation("Fp", rubik, liste);
     return 1;
   }
   return 0;
 }
 
-void dernireRotation(Face *rubik[NB_FACE], int cas)
+void dernireRotation(Face *rubik[NB_FACE], int cas, ListeChainee *liste)
 {
-  rotation("Lp", rubik);
-  rotation("U", rubik);
-  rotation("Rp", rubik);
-  rotation("D", rubik);
-  rotation("D", rubik);
-  rotation("R", rubik);
-  rotation("Up", rubik);
-  rotation("Rp", rubik);
-  rotation("D", rubik);
-  rotation("D", rubik);
-  rotation("R", rubik);
-  rotation("R", rubik);
+  rotation("Lp", rubik, liste);
+  rotation("U", rubik, liste);
+  rotation("Rp", rubik, liste);
+  rotation("D", rubik, liste);
+  rotation("D", rubik, liste);
+  rotation("R", rubik, liste);
+  rotation("Up", rubik, liste);
+  rotation("Rp", rubik, liste);
+  rotation("D", rubik, liste);
+  rotation("D", rubik, liste);
+  rotation("R", rubik, liste);
+  rotation("R", rubik, liste);
 
   // L' U R' D2 R U' R' R' D2 R2
 }

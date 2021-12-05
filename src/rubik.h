@@ -56,8 +56,10 @@ Face *chercheCellule(Face **, Color, int);
 void monterRubik(Face **);
 Color couleurCellule(Face *, int, int);
 int faceValide(Face *, Color);
-void faireFaceBlanche(Face **);
-void faireFaceJaune(Face **);
-void terminerRubik(Face **);
-void dernireRotation(Face **, int);
+void faireFaceBlanche(Face **, ListeChainee *);
+void faireFaceJaune(Face **, ListeChainee *);
+void terminerRubik(Face **, ListeChainee *);
+void dernireRotation(Face **, int, ListeChainee *);
+void printRubikInFile(Face **, char *);
+int rubikValide(Face **);
 #endif

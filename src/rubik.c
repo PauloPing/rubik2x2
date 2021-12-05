@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "listeChainee.h"
 #include "rubik.h"
 #include "rotation.h"
 
@@ -127,6 +128,72 @@ void printRubikCube(Face *rubik[NB_FACE])
   printf("\x1b[0m");
 }
 
+void printRubikInFile(Face *rubik[NB_FACE], char *nomFichier)
+{
+  FILE *fichier = fopen(nomFichier, "w");
+  int nbFaceMilieu = NB_FACE - 2;
+  int i, j, k;
+  int nbEspace = 8;
+  for (j = 0; j < nbEspace; j++)
+    fprintf(fichier, " ");
+  fprintf(fichier, " ------ \n");
+  for (i = 0; i < TAILLE_MATRICE; i++)
+  {
+    for (int j = 0; j < nbEspace; j++)
+      fprintf(fichier, " ");
+    fprintf(fichier, "|");
+    for (j = 0; j < TAILLE_MATRICE; j++)
+    {
+      fprintf(fichier, " %d ", rubik[HAUT]->tab[i][j].value); //  + face->tab[i]->y * TAILLE_MATRICE
+    }
+    fprintf(fichier, "|\n");
+  }
+  for (j = 0; j < nbEspace; j++)
+    fprintf(fichier, " ");
+  fprintf(fichier, " ------ \n");
+  for (i = 0; i < nbFaceMilieu; i++)
+  {
+    fprintf(fichier, " ------ ");
+  }
+  fprintf(fichier, "\n");
+  for (i = 0; i < TAILLE_MATRICE; i++)
+  {
+    for (j = 1; j < nbFaceMilieu + 1; j++)
+    {
+      fprintf(fichier, "|");
+
+      for (k = 0; k < TAILLE_MATRICE; k++)
+      {
+        fprintf(fichier, " %d ", rubik[j]->tab[i][k].value); //  + face->tab[i]->y * TAILLE_MATRICE
+      }
+      fprintf(fichier, "|");
+    }
+    fprintf(fichier, "\n");
+  }
+  for (i = 0; i < nbFaceMilieu; i++)
+  {
+    fprintf(fichier, " ------ ");
+  }
+  fprintf(fichier, "\n");
+  for (j = 0; j < nbEspace; j++)
+    fprintf(fichier, " ");
+  fprintf(fichier, " ------ \n");
+  for (i = 0; i < TAILLE_MATRICE; i++)
+  {
+    for (int j = 0; j < nbEspace; j++)
+      fprintf(fichier, " ");
+    fprintf(fichier, "|");
+    for (j = 0; j < TAILLE_MATRICE; j++)
+    {
+      fprintf(fichier, " %d ", rubik[BAS]->tab[i][j].value); //  + face->tab[i]->y * TAILLE_MATRICE
+    }
+    fprintf(fichier, "|\n");
+  }
+  for (j = 0; j < nbEspace; j++)
+    fprintf(fichier, " ");
+  fprintf(fichier, " ------ \n");
+  fclose(fichier);
+}
 /*
   Nom : creerRubik
   Description : Cette fonction crée le rubik (les 6 faces)
@@ -410,72 +477,67 @@ int faceValide(Face *face, Color color)
   Paramètres : le rubik
   Retour : void
 */
-void faireFaceBlanche(Face *rubik[NB_FACE])
+void faireFaceBlanche(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   tourneRubikDevant(rubik, chercheCellule(rubik, BLANC, 0));
   monterRubik(rubik);
 
   int compteur = 0;
   while (!celluleCorrecte(returnFace(HAUT, rubik), 0, 0, BLANC, 0))
-    rotation("Up", rubik);
+    rotation("Up", rubik, liste);
   if (celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 1) || celluleCorrecte(rubik[GAUCHE], 0, 1, BLANC, 1) || celluleCorrecte(rubik[DEVANT], 0, 0, BLANC, 1))
-    rotation("Dp", rubik);
+    rotation("Dp", rubik, liste);
   while (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1))
   {
-    rotation("Rp", rubik);
+    rotation("Rp", rubik, liste);
     if (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1))
-      rotation("Dp", rubik);
+      rotation("Dp", rubik, liste);
     if (!celluleCorrecte(rubik[HAUT], 0, 1, BLANC, 1) && compteur % 4 == 0)
-      rotation("F", rubik);
+      rotation("F", rubik, liste);
     compteur++;
   }
   while (!celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 2))
   {
     if (celluleCorrecte(rubik[DEVANT], 1, 1, BLANC, 2))
-      rotation("Dp", rubik);
-    rotation("F", rubik);
+      rotation("Dp", rubik, liste);
+    rotation("F", rubik, liste);
     if (!celluleCorrecte(rubik[HAUT], 1, 0, BLANC, 2))
-      rotation("Dp", rubik);
+      rotation("Dp", rubik, liste);
   }
   compteur = 0;
   if (celluleCorrecte(rubik[DEVANT], 1, 0, BLANC, 3) || celluleCorrecte(rubik[BAS], 0, 0, BLANC, 3))
   {
-    rotation("D", rubik);
-    rotation("Rp", rubik);
-    rotation("Dp", rubik);
-    rotation("R", rubik);
+    rotation("D", rubik, liste);
+    rotation("Rp", rubik, liste);
+    rotation("Dp", rubik, liste);
+    rotation("R", rubik, liste);
   }
   while (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
   {
-    rotation("Rp", rubik);
+    rotation("Rp", rubik, liste);
     for (int i = 0; i < 4 && !celluleCorrecte(rubik[DEVANT], 1, 1, BLANC, 3); i++)
     {
-      rotation("Dp", rubik);
+      rotation("Dp", rubik, liste);
     }
-    rotation("R", rubik);
+    rotation("R", rubik, liste);
     if (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
     {
-      rotation("F", rubik);
+      rotation("F", rubik, liste);
       for (int i = 0; i < 4 && !celluleCorrecte(rubik[DROITE], 1, 0, BLANC, 3); i++)
       {
-        rotation("Dp", rubik);
+        rotation("Dp", rubik, liste);
       }
-      rotation("Fp", rubik);
+      rotation("Fp", rubik, liste);
     }
     if (!celluleCorrecte(rubik[HAUT], 1, 1, BLANC, 3))
     {
-      rotation("F", rubik);
-      rotation("Dp", rubik);
-      rotation("Fp", rubik);
+      rotation("F", rubik, liste);
+      rotation("Dp", rubik, liste);
+      rotation("Fp", rubik, liste);
     }
   }
   if (!faceBlancheValide(rubik[HAUT]))
     printf("ERROR\n");
-  // else
-  // {
-  //   printRubikCube(rubik);
-  //   printf("NONONOONONOONONONONONONOONNO\n");
-  // }
 }
 
 /*
@@ -484,7 +546,7 @@ void faireFaceBlanche(Face *rubik[NB_FACE])
   Paramètres : le rubik
   Retour : void
 */
-void faireFaceJaune(Face *rubik[NB_FACE])
+void faireFaceJaune(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   tourneRubikDevant(rubik, returnFace(BAS, rubik));
   monterRubik(rubik);
@@ -492,15 +554,21 @@ void faireFaceJaune(Face *rubik[NB_FACE])
 
   while (!faceValide(rubik[HAUT], JAUNE))
   {
-    if (cas1(rubik) || cas2(rubik) || cas3(rubik) || cas4(rubik) || cas5(rubik) || cas6(rubik) || cas7(rubik))
+    if (cas1(rubik, liste) || cas2(rubik, liste) || cas3(rubik, liste) || cas4(rubik, liste) || cas5(rubik, liste) || cas6(rubik, liste) || cas7(rubik, liste))
       res = 1;
     else
-      rotation("U", rubik);
+      rotation("U", rubik, liste);
   }
   if (!faceValide(rubik[HAUT], JAUNE))
     printf("NONNONONN JAUNE JAUNE");
 }
 
+/*
+  Nom : rubikValide
+  Description : cette fonction vérifie que le rubik est correct.
+  Paramètres : le rubik
+  Retour : 1 si oui, sinon 0
+*/
 int rubikValide(Face *rubik[NB_FACE])
 {
   for (int i = 0; i < NB_FACE; i++)
@@ -513,6 +581,12 @@ int rubikValide(Face *rubik[NB_FACE])
   return 1;
 }
 
+/*
+  Nom : returnFaceJaune
+  Description : cette fonction retourne la face JAUNE (ATTENTION : NOUS SAVONS QUE LA FACE JAUNE EST COMPLÈTE)
+  Paramètres : le rubik
+  Retour : La face jaune
+*/
 Face *returnFaceJaune(Face *rubik[NB_FACE])
 {
   Face *res = malloc(sizeof(Face));
@@ -533,7 +607,7 @@ Face *returnFaceJaune(Face *rubik[NB_FACE])
   Paramètres : le rubik
   Retour : void
 */
-void terminerRubik(Face *rubik[NB_FACE])
+void terminerRubik(Face *rubik[NB_FACE], ListeChainee *liste)
 {
   if (rubikValide(rubik))
     return;
@@ -552,12 +626,12 @@ void terminerRubik(Face *rubik[NB_FACE])
       }
     }
     if (!valid)
-      rotation("U", rubik);
+      rotation("U", rubik, liste);
   }
   if (!valid && !rubikValide(rubik))
   {
 
-    dernireRotation(rubik, 0);
+    dernireRotation(rubik, 0, liste);
     tourneRubikDevant(rubik, returnFaceJaune(rubik));
     monterRubik(rubik);
     while (valid == 0)
@@ -573,11 +647,12 @@ void terminerRubik(Face *rubik[NB_FACE])
         }
       }
       if (!valid)
-        rotation("U", rubik);
+        rotation("U", rubik, liste);
     }
   }
-  if(!rubikValide(rubik)){
-    dernireRotation(rubik, 0);
-    rotation("Fp", rubik);
+  if (!rubikValide(rubik))
+  {
+    dernireRotation(rubik, 0, liste);
+    rotation("Fp", rubik, liste);
   }
 }

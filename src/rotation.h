@@ -3,7 +3,7 @@
 
 #define NB_ROTATION 12
 
-void rotation(char *, Face **);
+void rotation(char *, Face **, ListeChainee *);
 
 // rotation
 void rotationL(Face **);
@@ -22,14 +22,14 @@ void melangerRubik(Face **);
 
 // suite de rota pour faire la face jaune
 
-void rotationRURpUp(Face **);
-int cas1(Face **);
-int cas2(Face **);
-int cas3(Face **);
-int cas4(Face **);
-int cas5(Face **);
-int cas6(Face **);
-int cas7(Face **);
+void rotationRURpUp(Face **, ListeChainee *);
+int cas1(Face **, ListeChainee *);
+int cas2(Face **, ListeChainee *);
+int cas3(Face **, ListeChainee *);
+int cas4(Face **, ListeChainee *);
+int cas5(Face **, ListeChainee *);
+int cas6(Face **, ListeChainee *);
+int cas7(Face **, ListeChainee *);
 // Tableau avec toutes les rotations
 void *mouvement[NB_ROTATION] = {
     rotationL,
