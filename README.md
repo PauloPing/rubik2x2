@@ -1,15 +1,15 @@
-## Projet C - Rubik 2x2:
+## Project - Rubik 2x2:
 
 Année Scolaire : 2021/2022
 
-Groupe : Louis et Paul
-Sujet : Réalisation d'un runik 2x2
+Team : Louis and Paul
+Subject : make a rubik, mix it and finish it
 
-**LANCER LE JEU**
+**STARTING THE GAME**
 
-- Être dans le dossier "rubik2x2"
-- Faire : make
+- Go to the directory "rubik2x2"
+- Open terminal and writing make to use makefile. (The rubik should launch in the terminal with a information menu)
 
-**IMPORTANT**
+**CODE**
 
-- Chaque fonction dipose d'un commentaire pour la comprendre.
+Each function has a comment explaining what it does. (In French for the moment)
