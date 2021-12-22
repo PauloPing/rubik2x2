@@ -1,6 +1,6 @@
 ## Project - Rubik 2x2:
 
-Année Scolaire : 2021/2022
+Year : 2021 (L3)
 
 Team : Louis and Paul
 Subject : make a rubik, mix it and finish it
